@@ -27,8 +27,8 @@ class _TemperatureConversionAppState extends State<TemperatureConversionApp> {
             primaryColor: Colors.blueGrey[900],
             scaffoldBackgroundColor: Colors.blueGrey[50],
             textTheme: TextTheme(
-              bodyText1: TextStyle(color: Colors.black),
-              bodyText2: TextStyle(color: Colors.black),
+              bodyLarge: TextStyle(color: Colors.black),
+              bodyMedium: TextStyle(color: Colors.black),
             ),
             inputDecorationTheme: InputDecorationTheme(
               labelStyle: TextStyle(color: Colors.black),
@@ -123,8 +123,6 @@ class _TemperatureConversionHomeState extends State<TemperatureConversionHome> {
 
   @override
   Widget build(BuildContext context) {
-    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey[900],
@@ -158,35 +156,20 @@ class _TemperatureConversionHomeState extends State<TemperatureConversionHome> {
               ),
             ),
             const SizedBox(height: 16.0),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.0),
-              decoration: BoxDecoration(
-                color: isDarkMode ? Colors.blueGrey[800] : Colors.blueGrey[100],
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: DropdownButton<String>(
-                dropdownColor: isDarkMode ? Colors.blueGrey[800] : Colors.white,
-                value: _selectedConversion,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedConversion = newValue!;
-                  });
-                },
-                items: <String>['F to C', 'C to F']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: TextStyle(
-                        color: isDarkMode ? Colors.white : Colors.black,
-                      ),
-                    ),
-                  );
-                }).toList(),
-                underline: SizedBox(),
-                iconEnabledColor: isDarkMode ? Colors.white : Colors.black,
-              ),
+            DropdownButton<String>(
+              value: _selectedConversion,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedConversion = newValue!;
+                });
+              },
+              items: <String>['F to C', 'C to F']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
             SizedBox(height: 16.0),
             ValueListenableBuilder<bool>(
