@@ -1,18 +1,19 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, prefer_const_literals_to_create_immutables, prefer_final_fields, unnecessary_cast, unnecessary_overrides
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-void main() => runApp(TemperatureConversionApp());
+void main() => runApp(MyTempConverterApplication());
 
-class TemperatureConversionApp extends StatefulWidget {
-  const TemperatureConversionApp({super.key});
+class MyTempConverterApplication extends StatefulWidget {
+  const MyTempConverterApplication({super.key});
 
   @override
-  _TemperatureConversionAppState createState() =>
-      _TemperatureConversionAppState();
+  _MyTempConverterApplicationState createState() =>
+      _MyTempConverterApplicationState();
 }
 
-class _TemperatureConversionAppState extends State<TemperatureConversionApp> {
+class _MyTempConverterApplicationState extends State<MyTempConverterApplication> {
   ValueNotifier<ThemeMode> _themeMode = ValueNotifier(ThemeMode.light);
 
   @override
@@ -27,8 +28,8 @@ class _TemperatureConversionAppState extends State<TemperatureConversionApp> {
             primaryColor: Colors.blueGrey[900],
             scaffoldBackgroundColor: Colors.blueGrey[50],
             textTheme: TextTheme(
-              bodyText1: TextStyle(color: Colors.black),
-              bodyText2: TextStyle(color: Colors.black),
+              bodyLarge: TextStyle(color: Colors.black),
+              bodyMedium: TextStyle(color: Colors.black),
             ),
             inputDecorationTheme: InputDecorationTheme(
               labelStyle: TextStyle(color: Colors.black),
@@ -44,8 +45,8 @@ class _TemperatureConversionAppState extends State<TemperatureConversionApp> {
             primaryColor: Colors.blueGrey[900],
             scaffoldBackgroundColor: Colors.blueGrey[900],
             textTheme: TextTheme(
-              bodyText1: TextStyle(color: Colors.white),
-              bodyText2: TextStyle(color: Colors.white),
+              bodyLarge: TextStyle(color: Colors.white),
+              bodyMedium: TextStyle(color: Colors.white),
             ),
             inputDecorationTheme: InputDecorationTheme(
               labelStyle: TextStyle(color: Colors.white),
@@ -58,9 +59,17 @@ class _TemperatureConversionAppState extends State<TemperatureConversionApp> {
             ),
           ),
           themeMode: mode,
-          home: TemperatureConversionHome(
-            onThemeModeChanged: (newMode) {
-              _themeMode.value = newMode;
+          home: SplashScreen(
+            onInitComplete: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => MyTempConverterHome(
+                    onThemeModeChanged: (newMode) {
+                      _themeMode.value = newMode;
+                    },
+                  ),
+                ),
+              );
             },
           ),
         );
@@ -69,22 +78,19 @@ class _TemperatureConversionAppState extends State<TemperatureConversionApp> {
   }
 }
 
-class TemperatureConversionHome extends StatefulWidget {
+class MyTempConverterHome extends StatefulWidget {
   final ValueChanged<ThemeMode> onThemeModeChanged;
 
-  TemperatureConversionHome({required this.onThemeModeChanged});
+  const MyTempConverterHome({super.key, required this.onThemeModeChanged});
 
   @override
-  _TemperatureConversionHomeState createState() =>
-      _TemperatureConversionHomeState();
+  _MyTempConverterHomeState createState() => _MyTempConverterHomeState();
 }
 
-class _TemperatureConversionHomeState extends State<TemperatureConversionHome> {
+class _MyTempConverterHomeState extends State<MyTempConverterHome> {
   String _selectedConversion = 'F to C';
-  // ignore: prefer_final_fields
   TextEditingController _inputController = TextEditingController();
   String _result = '';
-  // ignore: prefer_final_fields
   List<String> _history = [];
   ValueNotifier<bool> _isButtonEnabled = ValueNotifier(false);
 
@@ -213,6 +219,71 @@ class _TemperatureConversionHomeState extends State<TemperatureConversionHome> {
                   );
                 },
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SplashScreen extends StatefulWidget {
+  final VoidCallback onInitComplete;
+
+  const SplashScreen({super.key, required this.onInitComplete});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+
+    Future.delayed(Duration(seconds: 3), () {
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => MyTempConverterHome(
+              onThemeModeChanged: (newMode) {
+                (context.findAncestorStateOfType<_MyTempConverterApplicationState>()! as _MyTempConverterApplicationState)._themeMode.value = newMode;
+              },
+            ),
+          ),
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          color: Color(0xFF143342),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.published_with_changes_rounded),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              "FIP",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 32),
             ),
           ],
         ),
