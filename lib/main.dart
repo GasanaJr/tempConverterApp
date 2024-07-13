@@ -13,7 +13,8 @@ class MyTempConverterApplication extends StatefulWidget {
       _MyTempConverterApplicationState();
 }
 
-class _MyTempConverterApplicationState extends State<MyTempConverterApplication> {
+class _MyTempConverterApplicationState
+    extends State<MyTempConverterApplication> {
   ValueNotifier<ThemeMode> _themeMode = ValueNotifier(ThemeMode.light);
 
   @override
@@ -249,7 +250,11 @@ class _SplashScreenState extends State<SplashScreen>
           MaterialPageRoute(
             builder: (context) => MyTempConverterHome(
               onThemeModeChanged: (newMode) {
-                (context.findAncestorStateOfType<_MyTempConverterApplicationState>()! as _MyTempConverterApplicationState)._themeMode.value = newMode;
+                (context.findAncestorStateOfType<
+                            _MyTempConverterApplicationState>()!
+                        as _MyTempConverterApplicationState)
+                    ._themeMode
+                    .value = newMode;
               },
             ),
           ),
@@ -274,16 +279,23 @@ class _SplashScreenState extends State<SplashScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.published_with_changes_rounded),
-            SizedBox(
-              height: 20,
+            Icon(
+              Icons.published_with_changes_rounded,
+              color: Colors.white,
+              size: 100,
             ),
-            Text(
-              "FIP",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 32),
+            SizedBox(
+              height: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Text(
+                "Temperature Converter App",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 27),
+              ),
             ),
           ],
         ),
