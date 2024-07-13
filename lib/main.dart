@@ -123,7 +123,7 @@ class _MyTempConverterHomeState extends State<MyTempConverterHome> {
     }
 
     setState(() {
-      _result = output.toStringAsFixed(2);
+      _result = output.toStringAsFixed(1);
       _history.insert(0, '$_selectedConversion: $input => $_result');
     });
   }
